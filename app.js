@@ -1,8 +1,12 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const morgon = require('morgan')
+
 const app = express();
+const logger = morgon('dev')
 
 app.use(bodyParser.json())
+app.use(logger)
 
 app.use((req, res, next) => {
   console.log("inspecting request.....");
@@ -13,9 +17,36 @@ app.use((req, res, next) => {
   next()
 })
 
-app.use((req, res, next) => {
-  console.log("responding to client request.....");
-  res.send("SUCCESS RESPONSE");
+app.use('/by-paas-for-user', (req, res, next) => {
+  console.log("Index route hit.........");
+
+  switch (req.method) {
+    case 'GET':
+      res.send("INDEX ROUTE GET");
+      break;
+    case 'POST':
+      res.send("INDEX ROUTE POST");
+      break;
+    default:
+      res.send("INDEX ROUTE *");
+      break;
+  }
+})
+
+app.use('/users', (req, res, next) => {
+  console.log("User route hit.........");
+
+  switch (req.method) {
+    case 'GET':
+      res.send("USERS ROUTE GET");
+      break;
+    case 'POST':
+      res.send("USERS ROUTE POST");
+      break;
+    default:
+      res.send("USERS ROUTE *");
+      break;
+  }
 })
 
 app.use((err, req, res, next) => {
