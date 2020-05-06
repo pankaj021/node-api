@@ -2,6 +2,9 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const morgon = require('morgan')
 
+const indexRouter = require('./routes')
+const userRouter = require('./routes/users')
+
 const app = express();
 const logger = morgon('dev')
 
@@ -17,37 +20,8 @@ app.use((req, res, next) => {
   next()
 })
 
-app.use('/by-paas-for-user', (req, res, next) => {
-  console.log("Index route hit.........");
-
-  switch (req.method) {
-    case 'GET':
-      res.send("INDEX ROUTE GET");
-      break;
-    case 'POST':
-      res.send("INDEX ROUTE POST");
-      break;
-    default:
-      res.send("INDEX ROUTE *");
-      break;
-  }
-})
-
-app.use('/users', (req, res, next) => {
-  console.log("User route hit.........");
-
-  switch (req.method) {
-    case 'GET':
-      res.send("USERS ROUTE GET");
-      break;
-    case 'POST':
-      res.send("USERS ROUTE POST");
-      break;
-    default:
-      res.send("USERS ROUTE *");
-      break;
-  }
-})
+app.use('/', indexRouter)
+app.use('/users', userRouter)
 
 app.use((err, req, res, next) => {
   console.log("Error middleware, since it has 4 params::::", err);
