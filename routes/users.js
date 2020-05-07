@@ -1,13 +1,53 @@
 const express = require('express');
 const router = express.Router();
+const UserModel = require('../model/User');
 
-router.get('/', (req, res, next) => {
-    res.send("USERS ROUTE GET");
+router.get('/', async(req, res, next) => { // READ
+    console.log("Finding all users from User collection......");
+    const allUsers = await UserModel.find();
+    res.send(allUsers);
 })
 
-router.post('/:adhaarParam', (req, res, next) => {
-    console.log("req.params:::::::::::", req.params);
-    res.send("USERS ROUTE POST");
+router.get('/:userId', async(req, res, next) => { // READ by id
+    console.log("Finding one user from User collection......");
+    const user = await UserModel.findById(req.params.userId)
+    res.send(user);
+})
+
+router.post('/', async(req, res, next) => { //CREATE
+    console.log("Inserts one user document in User collection......");
+    const userDoc = new UserModel({"name": req.body.name, "address": req.body.address, "createdAt": new Date()})
+    const createdUser = await userDoc.save();
+    console.log("user is created in User collection......", createdUser);
+    res.send(createdUser);
+})
+
+router.put('/:userId', async(req, res, next) => { // full UPDATE
+    console.log("Updates one user document in User collection......");
+    const updatedUser = await UserModel.findByIdAndUpdate({
+        _id: req.params.userId
+    }, {
+        "name": req.body.name,
+        "address": req.body.address
+    }, {new: true});
+    res.send(updatedUser);
+})
+
+router.patch('/:userId', async(req, res, next) => {
+    console.log("Patches one user document in User collection......");
+
+    const updatedUser = await UserModel.findByIdAndUpdate({
+        _id: req.params.userId
+    }, {
+        name: req.body.name
+    }, {new: true})
+    res.send(updatedUser)
+})
+
+router.delete('/:userId', async(req, res, next) => { // DELETE
+    console.log("deleting one user document from User collection......");
+    const deletedUser = await UserModel.findByIdAndDelete(req.params.userId)
+    res.send(deletedUser)
 })
 
 module.exports = router;

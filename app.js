@@ -4,6 +4,7 @@ const morgon = require('morgan')
 
 const indexRouter = require('./routes')
 const userRouter = require('./routes/users')
+require('./db/config');
 
 const app = express();
 const logger = morgon('dev')
