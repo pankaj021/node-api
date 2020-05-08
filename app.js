@@ -1,6 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const morgon = require('morgan')
+const cors = require('cors')
 
 const indexRouter = require('./routes')
 const userRouter = require('./routes/users')
@@ -11,6 +12,7 @@ const logger = morgon('dev')
 
 app.use(bodyParser.json())
 app.use(logger)
+app.use(cors())
 
 app.use((req, res, next) => {
   console.log("inspecting request.....");
